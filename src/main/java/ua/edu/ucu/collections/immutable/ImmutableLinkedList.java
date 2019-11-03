@@ -35,9 +35,9 @@ public class ImmutableLinkedList implements ImmutableList {
         return new Node[]{currentFromNode, currentToNode};
     }
 
-    private Node insertFromArray(Object[] array, Node node){
+    private Node insertFromArray(Object[] array, Node node) {
         Node currentNode = node;
-        for(int i = 0; i < array.length; i++){
+        for (int i = 0; i < array.length; i++) {
             currentNode.setNext(new Node(array[i]));
             currentNode = currentNode.getNext();
         }
@@ -45,7 +45,7 @@ public class ImmutableLinkedList implements ImmutableList {
         return currentNode;
     }
 
-    private void checkIfIndexOutOfBounds(int index){
+    private void checkIfIndexOutOfBounds(int index) {
         if (index >= this.size() || this.size() == 0 || index < 0) {
             throw new IndexOutOfBoundsException("Index out of range");
         }
@@ -55,32 +55,32 @@ public class ImmutableLinkedList implements ImmutableList {
         return head;
     }
 
-    @Override // Done
+    @Override
     public ImmutableLinkedList add(Object e) {
         return this.add(this.size(), e);
     }
 
-    @Override // Done
+    @Override
     public ImmutableLinkedList add(int index, Object e) {
         return this.addAll(index, new Object[]{e});
     }
 
-    @Override // Done
+    @Override
     public ImmutableLinkedList addAll(Object[] c) {
         return this.addAll(this.size(), c);
     }
 
-    @Override // Done
+    @Override
     public ImmutableLinkedList addAll(int index, Object[] c) {
-        if (index > this.size()) {
-            throw new IndexOutOfBoundsException("Index is greater than length");
+        if (index > this.size() || index < 0) {
+            throw new IndexOutOfBoundsException("Index is greater than length or less than zero");
         }
 
         ImmutableLinkedList resultImmutableLinkedList = new ImmutableLinkedList();
         Node tailNode = resultImmutableLinkedList.getHead();
         Node currentFromNode = this.getHead();
 
-        if (index != 0){
+        if (index != 0) {
             Node nodes[] = this.copyElements(currentFromNode, tailNode, index);
             currentFromNode = nodes[0];
             tailNode = nodes[1];
@@ -93,11 +93,11 @@ public class ImmutableLinkedList implements ImmutableList {
         return resultImmutableLinkedList;
     }
 
-    @Override // Done
+    @Override
     public Object get(int index) {
         checkIfIndexOutOfBounds(index);
         Node currentNode = this.getHead();
-        for(int i = 0; i < index; i++){
+        for (int i = 0; i < index; i++) {
             currentNode = currentNode.getNext();
         }
 
@@ -114,53 +114,58 @@ public class ImmutableLinkedList implements ImmutableList {
         return this.setOrRemove(index, e);
     }
 
-    private ImmutableLinkedList setOrRemove(int index, Object value){
+    private ImmutableLinkedList setOrRemove(int index, Object value) {
         checkIfIndexOutOfBounds(index);
         ImmutableLinkedList result = new ImmutableLinkedList();
         result.setSize(this.size());
         Node nodes[] = copyElements(this.getHead(), result.getHead(), index);
         Node currentFromNode = nodes[0];
         Node currentToNode = nodes[1];
-        if (value != null) { currentToNode = new Node(value); }
-        else { result.setSize(result.size() - 1); }
+        if (value != null) {
+            currentToNode = new Node(value);
+        } else {
+            result.setSize(result.size() - 1);
+        }
         currentFromNode = currentFromNode.getNext();
         copyElements(currentFromNode, currentToNode, this.size() - index - 1);
         result.setHead(result.getHead().getNext());
         return result;
     }
 
-    @Override // Done
+    @Override
     public int indexOf(Object e) {
         Node currentNode = this.getHead();
-        for(int i = 0; i < this.size(); i++){
-            if (currentNode.getData() == e){ return i; }
+        for (int i = 0; i < this.size(); i++) {
+            if (currentNode.getData() == e) {
+                return i;
+            }
             currentNode = currentNode.getNext();
         }
 
         return NOTFOUNDSTATUS;
     }
 
-    @Override // Done
+    @Override
     public int size() {
         return this.size;
     }
 
-    @Override //Done
+    @Override
     public ImmutableLinkedList clear() {
         return new ImmutableLinkedList();
     }
 
-    @Override // Done
+    @Override
     public boolean isEmpty() {
         return this.size() == 0;
     }
 
-    @Override // Done
+    @Override
     public Object[] toArray() {
         Object result[] = new Object[this.size()];
         Node currentNode = this.getHead();
 
-        for(int i = 0; i < this.size(); i++){
+        for (int i = 0; i < this.size(); i++) {
             result[i] = currentNode.getData();
             currentNode = currentNode.getNext();
         }
@@ -203,22 +208,27 @@ public class ImmutableLinkedList implements ImmutableList {
         }
     }
 
-    public ImmutableLinkedList addFirst(Object e){
+    public ImmutableLinkedList addFirst(Object e) {
         return this.add(0, e);
     }
-    public ImmutableLinkedList addLast(Object e){
+
+    public ImmutableLinkedList addLast(Object e) {
         return this.add(e);
     }
-    public Object getFirst(){
+
+    public Object getFirst() {
         return this.get(0);
     }
-    public Object getLast(){
+
+    public Object getLast() {
         return this.get(this.size() - 1);
     }
-    public ImmutableLinkedList removeFirst(){
+
+    public ImmutableLinkedList removeFirst() {
         return this.remove(0);
     }
-    public ImmutableLinkedList removeLast(){
+
+    public ImmutableLinkedList removeLast() {
         return this.remove(this.size() - 1);
     }
 }

@@ -92,7 +92,7 @@ public class ImmutableArrayList implements ImmutableList {
         return array.clone();
     }
 
-    private void checkIfIndexOutOfBounds(int index){
+    private void checkIfIndexOutOfBounds(int index) {
         if (index >= this.size() || this.size() == 0 || index < 0) {
             throw new IndexOutOfBoundsException("Index out of range");
         }
