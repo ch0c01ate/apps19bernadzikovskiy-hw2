@@ -1,51 +1,100 @@
 package ua.edu.ucu.collections.immutable;
 
 public class ImmutableArrayList implements ImmutableList {
-    public ImmutableList add(Object e) {
-        return null;
+    private Object[] array;
+    private static int NOTFOUNDSTATUS = -1;
+
+    public ImmutableArrayList() {
+        this.array = new Object[0];
     }
 
-    public ImmutableList add(int index, Object e) {
-        return null;
+    public ImmutableArrayList(Object[] a) {
+        this.array = a.clone();
     }
 
-    public ImmutableList addAll(Object[] c) {
-        return null;
+    @Override
+    public ImmutableArrayList add(Object e) {
+        return this.add(this.size(), e);
     }
 
-    public ImmutableList addAll(int index, Object[] c) {
-        return null;
+    @Override
+    public ImmutableArrayList add(int index, Object e) {
+        return this.addAll(index, new Object[]{e});
     }
 
+    @Override
+    public ImmutableArrayList addAll(Object[] c) {
+        return this.addAll(this.size(), c);
+    }
+
+    @Override
+    public ImmutableArrayList addAll(int index, Object[] c) {
+        Object[] resultArray = new Object[this.size() + c.length];
+        System.arraycopy(array, 0, resultArray, 0, index);
+        System.arraycopy(c, 0, resultArray, index, c.length);
+        System.arraycopy(array, index, resultArray, index + c.length,
+                this.size() - index);
+        return new ImmutableArrayList(resultArray);
+    }
+
+    @Override
     public Object get(int index) {
-        return null;
+        checkIfIndexOutOfBounds(index);
+        return array[index];
     }
 
-    public ImmutableList remove(int index) {
-        return null;
+    @Override
+    public ImmutableArrayList remove(int index) {
+        checkIfIndexOutOfBounds(index);
+
+        Object[] resultArray = new Object[this.size() - 1];
+        System.arraycopy(array, 0, resultArray, 0, index);
+        System.arraycopy(array, index + 1, resultArray, index, this.size() - index - 1);
+        return new ImmutableArrayList(resultArray);
     }
 
-    public ImmutableList set(int index, Object e) {
-        return null;
+    @Override
+    public ImmutableArrayList set(int index, Object e) {
+        checkIfIndexOutOfBounds(index);
+
+        Object[] resultArray = array.clone();
+        resultArray[index] = e;
+        return new ImmutableArrayList(resultArray);
     }
 
+    @Override
     public int indexOf(Object e) {
-        return 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == e) {
+                return i;
+            }
+        }
+        return NOTFOUNDSTATUS;
     }
 
+    @Override
     public int size() {
-        return 0;
+        return array.length;
     }
 
-    public ImmutableList clear() {
-        return null;
+    @Override
+    public ImmutableArrayList clear() {
+        return new ImmutableArrayList();
     }
 
+    @Override
     public boolean isEmpty() {
-        return false;
+        return this.size() == 0;
     }
 
+    @Override
     public Object[] toArray() {
-        return new Object[0];
+        return array.clone();
+    }
+
+    private void checkIfIndexOutOfBounds(int index){
+        if (index >= this.size() || this.size() == 0 || index < 0) {
+            throw new IndexOutOfBoundsException("Index out of range");
+        }
     }
 }
