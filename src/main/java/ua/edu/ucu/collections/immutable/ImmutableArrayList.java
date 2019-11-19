@@ -1,6 +1,6 @@
 package ua.edu.ucu.collections.immutable;
 
-public class ImmutableArrayList implements ImmutableList {
+public final class ImmutableArrayList implements ImmutableList {
     private Object[] array;
     private static int NOTFOUNDSTATUS = -1;
 

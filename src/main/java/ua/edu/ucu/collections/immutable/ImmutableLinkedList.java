@@ -1,6 +1,6 @@
 package ua.edu.ucu.collections.immutable;
 
-public class ImmutableLinkedList implements ImmutableList {
+public final class ImmutableLinkedList implements ImmutableList {
     private static int NOTFOUNDSTATUS = -1;
     private Node head;
     private int size;
