@@ -1,9 +1,9 @@
 package ua.edu.ucu.collections.immutable;
 
 public class ImmutableLinkedList implements ImmutableList {
+    private static int NOTFOUNDSTATUS = -1;
     private Node head;
     private int size;
-    private static int NOTFOUNDSTATUS = -1;
 
     public ImmutableLinkedList() {
         this.head = new Node(null);
@@ -55,6 +55,10 @@ public class ImmutableLinkedList implements ImmutableList {
         return head;
     }
 
+    public void setHead(Node head) {
+        this.head = head;
+    }
+
     @Override
     public ImmutableLinkedList add(Object e) {
         return this.add(this.size(), e);
@@ -81,7 +85,7 @@ public class ImmutableLinkedList implements ImmutableList {
         Node currentFromNode = this.getHead();
 
         if (index != 0) {
-            Node nodes[] = this.copyElements(currentFromNode, tailNode, index);
+            Node[] nodes = this.copyElements(currentFromNode, tailNode, index);
             currentFromNode = nodes[0];
             tailNode = nodes[1];
         }
@@ -118,7 +122,7 @@ public class ImmutableLinkedList implements ImmutableList {
         checkIfIndexOutOfBounds(index);
         ImmutableLinkedList result = new ImmutableLinkedList();
         result.setSize(this.size());
-        Node nodes[] = copyElements(this.getHead(), result.getHead(), index);
+        Node[] nodes = copyElements(this.getHead(), result.getHead(), index);
         Node currentFromNode = nodes[0];
         Node currentToNode = nodes[1];
         if (value != null) {
@@ -162,7 +166,7 @@ public class ImmutableLinkedList implements ImmutableList {
 
     @Override
     public Object[] toArray() {
-        Object result[] = new Object[this.size()];
+        Object[] result = new Object[this.size()];
         Node currentNode = this.getHead();
 
         for (int i = 0; i < this.size(); i++) {
@@ -173,12 +177,32 @@ public class ImmutableLinkedList implements ImmutableList {
         return result;
     }
 
-    public void setHead(Node head) {
-        this.head = head;
-    }
-
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public ImmutableLinkedList addFirst(Object e) {
+        return this.add(0, e);
+    }
+
+    public ImmutableLinkedList addLast(Object e) {
+        return this.add(e);
+    }
+
+    public Object getFirst() {
+        return this.get(0);
+    }
+
+    public Object getLast() {
+        return this.get(this.size() - 1);
+    }
+
+    public ImmutableLinkedList removeFirst() {
+        return this.remove(0);
+    }
+
+    public ImmutableLinkedList removeLast() {
+        return this.remove(this.size() - 1);
     }
 
     static class Node {
@@ -206,29 +230,5 @@ public class ImmutableLinkedList implements ImmutableList {
         Node copy() {
             return new Node(this.data);
         }
-    }
-
-    public ImmutableLinkedList addFirst(Object e) {
-        return this.add(0, e);
-    }
-
-    public ImmutableLinkedList addLast(Object e) {
-        return this.add(e);
-    }
-
-    public Object getFirst() {
-        return this.get(0);
-    }
-
-    public Object getLast() {
-        return this.get(this.size() - 1);
-    }
-
-    public ImmutableLinkedList removeFirst() {
-        return this.remove(0);
-    }
-
-    public ImmutableLinkedList removeLast() {
-        return this.remove(this.size() - 1);
     }
 }
